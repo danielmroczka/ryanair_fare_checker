@@ -13,6 +13,9 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class FareService {
@@ -52,18 +55,28 @@ public class FareService {
                 t.setDate(fare.getDay());
             }
 
-            Price price = new Price();
-            price.setPrice(Double.parseDouble(fare.getPrice().getValue()));
-            price.setDate(LocalDateTime.now());
-            price.setCurrency(fare.getPrice().getCurrencyCode());
+            if (fare.getPrice() != null) {
+                Price price = new Price();
+                price.setPrice(Double.parseDouble(fare.getPrice().getValue()));
+                price.setDate(LocalDateTime.now());
+                price.setCurrency(fare.getPrice().getCurrencyCode());
 
-            t.getFares().add(price);
-            priceRepository.save(price);
+                t.getFares().add(price);
+                priceRepository.save(price);
+            }
             repository.save(t);
         }
     }
 
     public Trip cache(String origin, String destination, String date) {
         return repository.findByOriginAndDestinationAndDate(origin, destination, date);
+    }
+
+    public List<Trip> caches(String origin, String destination, String date) {
+        List<Trip> result = new ArrayList<>();
+        var firstDay = LocalDate.from(new Date(date).toInstant());
+        var LastDay = LocalDate.from(new Date(date).toInstant());
+
+        //return repository.findByOriginAndDestinationAndDate(origin, destination, date);
     }
 }
