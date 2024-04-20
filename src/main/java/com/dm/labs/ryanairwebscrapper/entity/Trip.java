@@ -1,7 +1,6 @@
 package com.dm.labs.ryanairwebscrapper.entity;
 
 import jakarta.persistence.*;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +20,12 @@ public class Trip {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Price> fares = new ArrayList<>();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getOrigin() {

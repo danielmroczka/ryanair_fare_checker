@@ -20,13 +20,10 @@ import java.util.List;
 @Service
 public class FareService {
 
-    private String url = "https://www.ryanair.com/api/farfnd/v4";
-
     private final RestTemplate restTemplate;
-
     private final TripRepository repository;
-
     private final PriceRepository priceRepository;
+    private String url = "https://www.ryanair.com/api/farfnd/v4";
 
     public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository repository, PriceRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
@@ -46,7 +43,7 @@ public class FareService {
     }
 
     public void persist(String origin, String destination, Root root) {
-        for (var fare: root.getOutbound().getFares()) {
+        for (var fare : root.getOutbound().getFares()) {
             Trip t = repository.findByOriginAndDestinationAndDate(origin, destination, fare.getDay());
             if (t == null) {
                 t = new Trip();

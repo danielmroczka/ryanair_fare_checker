@@ -1,9 +1,5 @@
 package com.dm.labs.ryanairwebscrapper.model;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-
-
 public class Fare {
     private String day;
     private Price price;
