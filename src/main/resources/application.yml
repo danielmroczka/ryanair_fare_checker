@@ -22,3 +22,9 @@ spring:
       hibernate:
         format_sql: true
         show_sql: false
+
+# swagger-ui custom path
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    path: /swagger-ui.html
