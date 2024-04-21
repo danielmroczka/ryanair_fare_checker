@@ -40,7 +40,7 @@ public class WebController {
     @RequestMapping("/caches/{origin}/{destination}/{date}")
     public List<Trip> readFromDBS(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.caches(origin, destination, date);
-        return List.of(root);
+        return root;
 
     }
 

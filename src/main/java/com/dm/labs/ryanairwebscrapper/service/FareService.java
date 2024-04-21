@@ -75,5 +75,6 @@ public class FareService {
         var LastDay = LocalDate.from(new Date(date).toInstant());
 
         //return repository.findByOriginAndDestinationAndDate(origin, destination, date);
+        return List.of();
     }
 }
