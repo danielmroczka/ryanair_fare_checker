@@ -23,7 +23,7 @@ public class FareService {
     private final RestTemplate restTemplate;
     private final TripRepository repository;
     private final PriceRepository priceRepository;
-    private String url = "https://www.ryanair.com/api/farfnd/v4";
+    private final String url = "https://www.ryanair.com/api/farfnd/v4";
 
     public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository repository, PriceRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
@@ -33,7 +33,7 @@ public class FareService {
 
     public Root fareByMonth(String origin, String destination, String date) {
         if (date.length() == 2) {
-            date = LocalDate.of(LocalDate.now().getYear(), Integer.valueOf(date), 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            date = LocalDate.of(LocalDate.now().getYear(), Integer.parseInt(date), 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
 
         String fooResourceUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR", origin, destination, date);
