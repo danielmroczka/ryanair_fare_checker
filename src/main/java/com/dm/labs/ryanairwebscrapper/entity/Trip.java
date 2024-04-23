@@ -2,6 +2,7 @@ package com.dm.labs.ryanairwebscrapper.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Trip {
 
     private String destination;
 
-    private String date;
+    private LocalDate date;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Price> fares = new ArrayList<>();
@@ -44,11 +45,11 @@ public class Trip {
         this.destination = destination;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

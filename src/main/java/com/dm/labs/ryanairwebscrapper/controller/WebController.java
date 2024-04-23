@@ -3,10 +3,7 @@ package com.dm.labs.ryanairwebscrapper.controller;
 import com.dm.labs.ryanairwebscrapper.entity.Trip;
 import com.dm.labs.ryanairwebscrapper.model.Fare;
 import com.dm.labs.ryanairwebscrapper.service.FareService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,28 +17,28 @@ public class WebController {
         this.fareService = fareService;
     }
 
-    @GetMapping
-    @RequestMapping("/trip/{origin}/{destination}/{date}")
+    @GetMapping("/trip/{origin}/{destination}/{date}")
     public List<Fare> getTrip(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.fareByMonth(origin, destination, date);
         fareService.persist(origin, destination, root);
-        return root.getOutbound().getFares();
+        return root;
     }
 
-    @GetMapping
-    @RequestMapping("/cache/{origin}/{destination}/{date}")
+    @GetMapping("/cache/{origin}/{destination}/{date}")
     public Trip readFromDB(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.cache(origin, destination, date);
         return root;
-
     }
 
-    @GetMapping
-    @RequestMapping("/caches/{origin}/{destination}/{date}")
+    @GetMapping("/caches/{origin}/{destination}/{date}")
     public List<Trip> readFromDBS(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.caches(origin, destination, date);
         return root;
+    }
 
+    @DeleteMapping("/caches/{origin}/{destination}/{date}")
+    public void deleteTripByMonth(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
+        fareService.delete(origin, destination, date);
     }
 
 }

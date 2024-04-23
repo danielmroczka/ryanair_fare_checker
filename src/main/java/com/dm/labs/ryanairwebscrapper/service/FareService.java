@@ -2,6 +2,7 @@ package com.dm.labs.ryanairwebscrapper.service;
 
 import com.dm.labs.ryanairwebscrapper.entity.Price;
 import com.dm.labs.ryanairwebscrapper.entity.Trip;
+import com.dm.labs.ryanairwebscrapper.model.Fare;
 import com.dm.labs.ryanairwebscrapper.model.Root;
 import com.dm.labs.ryanairwebscrapper.repository.PriceRepository;
 import com.dm.labs.ryanairwebscrapper.repository.TripRepository;
@@ -12,44 +13,44 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class FareService {
 
     private final RestTemplate restTemplate;
-    private final TripRepository repository;
+    private final TripRepository tripRepository;
     private final PriceRepository priceRepository;
     private final String url = "https://www.ryanair.com/api/farfnd/v4";
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository repository, PriceRepository priceRepository) {
+    public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, PriceRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
-        this.repository = repository;
+        this.tripRepository = tripRepository;
         this.priceRepository = priceRepository;
     }
 
-    public Root fareByMonth(String origin, String destination, String date) {
-        if (date.length() == 2) {
-            date = LocalDate.of(LocalDate.now().getYear(), Integer.parseInt(date), 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
+    public List<Fare> fareByMonth(String origin, String destination, String date) {
+        List<Fare> fares = new ArrayList<>();
 
-        String fooResourceUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR", origin, destination, date);
+        String fooResourceUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR", origin, destination, toFirstMonthDay(date));
         ResponseEntity<Root> response = restTemplate.getForEntity(fooResourceUrl, Root.class);
+        fares.addAll(response.getBody().getOutbound().getFares().stream().filter(fare -> fare.getPrice() != null).toList());
 
-        return response.getBody();
+        return fares;
     }
 
-    public void persist(String origin, String destination, Root root) {
-        for (var fare : root.getOutbound().getFares()) {
-            Trip t = repository.findByOriginAndDestinationAndDate(origin, destination, fare.getDay());
+    public void persist(String origin, String destination, List<Fare> fares) {
+        for (var fare : fares) {
+            Trip t = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay()));
             if (t == null) {
                 t = new Trip();
                 t.setOrigin(origin);
                 t.setDestination(destination);
-                t.setDate(fare.getDay());
+                t.setDate(LocalDate.parse(fare.getDay()));
             }
 
             if (fare.getPrice() != null) {
@@ -60,21 +61,26 @@ public class FareService {
 
                 t.getFares().add(price);
                 priceRepository.save(price);
+                tripRepository.save(t);
             }
-            repository.save(t);
+
         }
     }
 
     public Trip cache(String origin, String destination, String date) {
-        return repository.findByOriginAndDestinationAndDate(origin, destination, date);
+        return tripRepository.findByOriginAndDestinationAndDate(origin, destination, toFirstMonthDay(date));
     }
 
     public List<Trip> caches(String origin, String destination, String date) {
-        List<Trip> result = new ArrayList<>();
-        var firstDay = LocalDate.from(new Date(date).toInstant());
-        var LastDay = LocalDate.from(new Date(date).toInstant());
+        YearMonth yearMonth = YearMonth.from(LocalDate.parse(date));
+        return tripRepository.findByOriginAndDestinationAndDateBetween(origin, destination, yearMonth.atDay(1), yearMonth.atEndOfMonth());    }
 
-        //return repository.findByOriginAndDestinationAndDate(origin, destination, date);
-        return List.of();
+    public void delete(String origin, String destination, String date) {
+        tripRepository.deleteAllInBatch(caches(origin, destination, date));
+    }
+
+    private LocalDate toFirstMonthDay(String date) {
+        YearMonth month = YearMonth.parse(date);
+        return month.atDay(1);
     }
 }
