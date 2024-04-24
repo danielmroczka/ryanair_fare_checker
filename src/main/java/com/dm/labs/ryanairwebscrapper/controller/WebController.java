@@ -22,9 +22,9 @@ public class WebController {
     }
 
     @Operation(summary = "Generates trip price update")
-    @Parameter(in = ParameterIn.PATH, name ="origin" ,schema = @Schema(type = "string"))
-    @Parameter(in = ParameterIn.PATH, name ="destination" ,schema = @Schema(type = "string"))
-    @Parameter(in = ParameterIn.PATH, name ="date" ,schema = @Schema(type = "date"))
+    @Parameter(in = ParameterIn.PATH, name ="origin" ,schema = @Schema(type = "string"), example = "VIE")
+    @Parameter(in = ParameterIn.PATH, name ="destination" ,schema = @Schema(type = "string"), example = "KRK")
+    @Parameter(in = ParameterIn.PATH, name ="date" ,schema = @Schema(type = "string"), example = "2024-05")
     @PostMapping("/trip/{origin}/{destination}/{date}")
     public List<Fare> createFares(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.fareByMonth(origin, destination, date);
