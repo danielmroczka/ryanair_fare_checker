@@ -72,7 +72,7 @@ public class FareService {
     }
 
     public List<Trip> caches(String origin, String destination, String date) {
-        YearMonth yearMonth = YearMonth.from(LocalDate.parse(date));
+        YearMonth yearMonth = YearMonth.parse(date);
         return tripRepository.findByOriginAndDestinationAndDateBetween(origin, destination, yearMonth.atDay(1), yearMonth.atEndOfMonth());    }
 
     public void delete(String origin, String destination, String date) {
