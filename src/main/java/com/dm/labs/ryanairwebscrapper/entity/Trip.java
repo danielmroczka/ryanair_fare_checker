@@ -18,8 +18,9 @@ public class Trip {
 
     private LocalDate date;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Price> fares = new ArrayList<>();
+    @OneToMany( orphanRemoval = true)
+    @JoinColumn(name = "trip_id")
+    private List<Fare> fares = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -53,11 +54,11 @@ public class Trip {
         this.date = date;
     }
 
-    public List<Price> getFares() {
+    public List<Fare> getFares() {
         return fares;
     }
 
-    public void setFares(List<Price> fares) {
+    public void setFares(List<Fare> fares) {
         this.fares = fares;
     }
 }

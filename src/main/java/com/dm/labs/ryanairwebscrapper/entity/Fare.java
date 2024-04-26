@@ -1,18 +1,20 @@
 package com.dm.labs.ryanairwebscrapper.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Price {
+public class Fare {
     @Id
     @GeneratedValue
     @JsonIgnore
     private Long id;
+
+//    @ManyToOne
+//    @JoinColumn(name="trip_id", nullable=false)
+//    private Trip trip;
 
     private double price;
 
@@ -20,13 +22,13 @@ public class Price {
 
     private LocalDateTime date;
 
-    public Price(double price, String currency, LocalDateTime date) {
+    public Fare(double price, String currency, LocalDateTime date) {
         this.price = price;
         this.currency = currency;
         this.date = date;
     }
 
-    public Price() {
+    public Fare() {
 
     }
 
@@ -61,4 +63,12 @@ public class Price {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
+
+//    public Trip getTrip() {
+//        return trip;
+//    }
+//
+//    public void setTrip(Trip trip) {
+//        this.trip = trip;
+//    }
 }
