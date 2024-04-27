@@ -24,7 +24,7 @@ public class FareService {
     private final TripRepository tripRepository;
     private final FareRepository fareRepository;
     private final String url = "https://www.ryanair.com/api/farfnd/v4";
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, FareRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
