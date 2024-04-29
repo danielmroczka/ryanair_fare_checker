@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class WebController {
+public class FareController {
 
     private final FareService fareService;
 
-    public WebController(FareService fareService) {
+    public FareController(FareService fareService) {
         this.fareService = fareService;
     }
 
@@ -42,8 +42,7 @@ public class WebController {
     @Operation(summary = "Retrieves price report by month")
     @GetMapping("/caches/{origin}/{destination}/{date}")
     public List<Trip> readTripsByMonth(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
-        var root = fareService.caches(origin, destination, date);
-        return root;
+        return fareService.caches(origin, destination, date);
     }
 
     @Operation(summary = "Delete monthly trip report")

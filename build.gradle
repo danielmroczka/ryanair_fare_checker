@@ -24,9 +24,13 @@ dependencies {
     // Springdoc
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.0'
+
+    // Runtime
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
