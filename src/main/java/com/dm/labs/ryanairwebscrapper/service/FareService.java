@@ -18,6 +18,8 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FareService {
@@ -39,7 +41,7 @@ public class FareService {
 
         String fooResourceUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR", origin, destination, toFirstMonthDay(date));
         ResponseEntity<Root> response = restTemplate.getForEntity(fooResourceUrl, Root.class);
-        fares.addAll(response.getBody().getOutbound().getFares().stream().filter(fare -> fare.getPrice() != null).toList());
+        fares.addAll(Objects.requireNonNull(response.getBody()).getOutbound().getFares().stream().filter(fare -> fare.getPrice() != null).toList());
 
         return fares;
     }
@@ -64,15 +66,16 @@ public class FareService {
     }
 
     private Trip fetchTrip(String origin, String destination, com.dm.labs.ryanairwebscrapper.model.Fare fare) {
-        Trip trip = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay())).orElseThrow(EntityNotFoundException::new);
-        if (trip == null) {
-            trip = new Trip();
+        Optional<Trip> result = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay()));
+        if (result.isEmpty() ) {
+            var trip = new Trip();
             trip.setOrigin(origin);
             trip.setDestination(destination);
             trip.setDate(LocalDate.parse(fare.getDay()));
             tripRepository.save(trip);
+            result = Optional.of(trip);
         }
-        return trip;
+        return result.get();
     }
 
     public Trip cache(String origin, String destination, String date) {
@@ -111,6 +114,6 @@ public class FareService {
     public void scheduleTaskUsingCronExpression() {
         var res = fareByMonth("VIE", "KRK", "2024-05");
 
-        System.out.println(res);
+        System.out.println(res.toString());
     }
 }

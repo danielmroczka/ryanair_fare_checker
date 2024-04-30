@@ -19,4 +19,12 @@ public class Fare {
     public void setPrice(Price price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Fare{" +
+                "day='" + day + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

@@ -20,4 +20,9 @@ public class Price {
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
+    @Override
+    public String toString() {
+        return "'" + value + currencyCode + '\'';
+    }
 }
