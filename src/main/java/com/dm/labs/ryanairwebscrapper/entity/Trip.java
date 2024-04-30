@@ -1,5 +1,7 @@
 package com.dm.labs.ryanairwebscrapper.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -60,5 +62,27 @@ public class Trip {
 
     public void setFares(List<Fare> fares) {
         this.fares = fares;
+    }
+
+    @Transient
+    private double min;
+
+    @Transient
+    private double max;
+
+    public double getMin() {
+        return min;
+    }
+
+    public void setMin(double min) {
+        this.min = min;
+    }
+
+    public double getMax() {
+        return max;
+    }
+
+    public void setMax(double max) {
+        this.max = max;
     }
 }

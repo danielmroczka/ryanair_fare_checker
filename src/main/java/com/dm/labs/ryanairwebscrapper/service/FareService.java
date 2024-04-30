@@ -5,8 +5,10 @@ import com.dm.labs.ryanairwebscrapper.entity.Trip;
 import com.dm.labs.ryanairwebscrapper.model.Root;
 import com.dm.labs.ryanairwebscrapper.repository.FareRepository;
 import com.dm.labs.ryanairwebscrapper.repository.TripRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,7 +44,7 @@ public class FareService {
         return fares;
     }
 
-    public void persist(String origin, String destination, List<com.dm.labs.ryanairwebscrapper.model.Fare> fares) {
+    public void saveFares(String origin, String destination, List<com.dm.labs.ryanairwebscrapper.model.Fare> fares) {
         for (var fare : fares) {
             Trip trip = fetchTrip(origin, destination, fare);
 
@@ -62,7 +64,7 @@ public class FareService {
     }
 
     private Trip fetchTrip(String origin, String destination, com.dm.labs.ryanairwebscrapper.model.Fare fare) {
-        Trip trip = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay()));
+        Trip trip = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay())).orElseThrow(EntityNotFoundException::new);
         if (trip == null) {
             trip = new Trip();
             trip.setOrigin(origin);
@@ -74,7 +76,21 @@ public class FareService {
     }
 
     public Trip cache(String origin, String destination, String date) {
-        return tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(date));
+        Trip trip = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(date)).orElseThrow(EntityNotFoundException::new);
+
+        var last = trip.getFares().get(0).getPrice();
+
+        for (Fare fare : trip.getFares()) {
+            var delta = fare.getPrice() - last;
+            fare.setChange(delta);
+        }
+        var min = trip.getFares().stream().mapToDouble(Fare::getPrice).min().getAsDouble();
+        var max = trip.getFares().stream().mapToDouble(Fare::getPrice).max().getAsDouble();
+
+        trip.setMin(min);
+        trip.setMax(max);
+
+        return trip;
     }
 
     public List<Trip> caches(String origin, String destination, String date) {
@@ -89,5 +105,12 @@ public class FareService {
     private LocalDate toFirstMonthDay(String date) {
         YearMonth month = YearMonth.parse(date);
         return month.atDay(1);
+    }
+
+    @Scheduled(cron = "0 */1 * ? * *")
+    public void scheduleTaskUsingCronExpression() {
+        var res = fareByMonth("VIE", "KRK", "2024-05");
+
+        System.out.println(res);
     }
 }

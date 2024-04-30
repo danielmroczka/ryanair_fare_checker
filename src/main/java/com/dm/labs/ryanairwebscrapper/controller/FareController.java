@@ -28,7 +28,7 @@ public class FareController {
     @PostMapping("/trip/{origin}/{destination}/{date}")
     public List<Fare> createFares(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.fareByMonth(origin, destination, date);
-        fareService.persist(origin, destination, root);
+        fareService.saveFares(origin, destination, root);
         return root;
     }
 

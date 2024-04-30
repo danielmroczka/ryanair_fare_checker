@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Long> {
-    Trip findByOriginAndDestinationAndDate(String origin, String destination, LocalDate date);
+    Optional<Trip> findByOriginAndDestinationAndDate(String origin, String destination, LocalDate date);
 
     List<Trip> findByOriginAndDestinationAndDateBetween(String origin, String destination, LocalDate dateStart, LocalDate dateEnd);
 }
