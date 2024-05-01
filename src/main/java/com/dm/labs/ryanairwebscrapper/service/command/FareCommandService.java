@@ -1,8 +1,8 @@
-package com.dm.labs.ryanairwebscrapper.service;
+package com.dm.labs.ryanairwebscrapper.service.command;
 
+import com.dm.labs.ryanairwebscrapper.clientmodel.Root;
 import com.dm.labs.ryanairwebscrapper.entity.Fare;
 import com.dm.labs.ryanairwebscrapper.entity.Trip;
-import com.dm.labs.ryanairwebscrapper.model.Root;
 import com.dm.labs.ryanairwebscrapper.repository.FareRepository;
 import com.dm.labs.ryanairwebscrapper.repository.TripRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class FareService {
+public class FareCommandService {
 
     private final RestTemplate restTemplate;
     private final TripRepository tripRepository;
@@ -30,14 +30,14 @@ public class FareService {
     private final String url = "https://www.ryanair.com/api/farfnd/v4";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public FareService(RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, FareRepository priceRepository) {
+    public FareCommandService(RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, FareRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
         this.tripRepository = tripRepository;
         this.fareRepository = priceRepository;
     }
 
-    public List<com.dm.labs.ryanairwebscrapper.model.Fare> fareByMonth(String origin, String destination, String date) {
-        List<com.dm.labs.ryanairwebscrapper.model.Fare> fares = new ArrayList<>();
+    public List<com.dm.labs.ryanairwebscrapper.clientmodel.Fare> fareByMonth(String origin, String destination, String date) {
+        List<com.dm.labs.ryanairwebscrapper.clientmodel.Fare> fares = new ArrayList<>();
 
         String fooResourceUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR", origin, destination, toFirstMonthDay(date));
         ResponseEntity<Root> response = restTemplate.getForEntity(fooResourceUrl, Root.class);
@@ -46,7 +46,7 @@ public class FareService {
         return fares;
     }
 
-    public void saveFares(String origin, String destination, List<com.dm.labs.ryanairwebscrapper.model.Fare> fares) {
+    public void saveFares(String origin, String destination, List<com.dm.labs.ryanairwebscrapper.clientmodel.Fare> fares) {
         for (var fare : fares) {
             Trip trip = fetchTrip(origin, destination, fare);
 
@@ -65,9 +65,9 @@ public class FareService {
         }
     }
 
-    private Trip fetchTrip(String origin, String destination, com.dm.labs.ryanairwebscrapper.model.Fare fare) {
+    private Trip fetchTrip(String origin, String destination, com.dm.labs.ryanairwebscrapper.clientmodel.Fare fare) {
         Optional<Trip> result = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay()));
-        if (result.isEmpty() ) {
+        if (result.isEmpty()) {
             var trip = new Trip();
             trip.setOrigin(origin);
             trip.setDestination(destination);

@@ -2,7 +2,10 @@ package com.dm.labs.ryanairwebscrapper.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +21,9 @@ public class Fare {
     private String currency;
 
     private LocalDateTime date;
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Double change;
 
     public Fare(double price, String currency, LocalDateTime date) {
         this.price = price;
@@ -60,10 +66,6 @@ public class Fare {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-
-    @Transient
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Double change;
 
     public double getChange() {
         return change;

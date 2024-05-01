@@ -1,8 +1,8 @@
 package com.dm.labs.ryanairwebscrapper.controller;
 
+import com.dm.labs.ryanairwebscrapper.clientmodel.Fare;
 import com.dm.labs.ryanairwebscrapper.entity.Trip;
-import com.dm.labs.ryanairwebscrapper.model.Fare;
-import com.dm.labs.ryanairwebscrapper.service.FareService;
+import com.dm.labs.ryanairwebscrapper.service.command.FareCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -15,16 +15,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class FareController {
 
-    private final FareService fareService;
+    private final FareCommandService fareService;
 
-    public FareController(FareService fareService) {
+    public FareController(FareCommandService fareService) {
         this.fareService = fareService;
     }
 
     @Operation(summary = "Generates trip price update")
-    @Parameter(in = ParameterIn.PATH, name ="origin" ,schema = @Schema(type = "string"), example = "VIE")
-    @Parameter(in = ParameterIn.PATH, name ="destination" ,schema = @Schema(type = "string"), example = "KRK")
-    @Parameter(in = ParameterIn.PATH, name ="date" ,schema = @Schema(type = "string"), example = "2024-05")
+    @Parameter(in = ParameterIn.PATH, name = "origin", schema = @Schema(type = "string"), example = "VIE")
+    @Parameter(in = ParameterIn.PATH, name = "destination", schema = @Schema(type = "string"), example = "KRK")
+    @Parameter(in = ParameterIn.PATH, name = "date", schema = @Schema(type = "string"), example = "2024-05")
     @PostMapping("/trip/{origin}/{destination}/{date}")
     public List<Fare> createFares(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         var root = fareService.fareByMonth(origin, destination, date);

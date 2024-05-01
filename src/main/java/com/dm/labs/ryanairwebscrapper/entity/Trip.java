@@ -1,7 +1,5 @@
 package com.dm.labs.ryanairwebscrapper.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -20,9 +18,13 @@ public class Trip {
 
     private LocalDate date;
 
-    @OneToMany( orphanRemoval = true)
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "trip_id")
     private List<Fare> fares = new ArrayList<>();
+    @Transient
+    private double min;
+    @Transient
+    private double max;
 
     public Long getId() {
         return id;
@@ -63,12 +65,6 @@ public class Trip {
     public void setFares(List<Fare> fares) {
         this.fares = fares;
     }
-
-    @Transient
-    private double min;
-
-    @Transient
-    private double max;
 
     public double getMin() {
         return min;
