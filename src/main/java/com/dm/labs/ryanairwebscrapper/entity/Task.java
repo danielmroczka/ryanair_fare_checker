@@ -18,12 +18,12 @@ public class Task {
 
     private int monthsAhead;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public int getIntervals() {

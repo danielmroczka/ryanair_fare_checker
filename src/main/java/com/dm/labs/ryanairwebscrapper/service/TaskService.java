@@ -24,10 +24,8 @@ public class TaskService {
 
     private final FareCommandService fareCommandService;
     private final TaskRepository repository;
-
-    private ThreadPoolTaskScheduler executor;
-
     List<ScheduledFuture> schedule = new ArrayList<>();
+    private ThreadPoolTaskScheduler executor;
 
     public TaskService(FareCommandService fareCommandService, TaskRepository repository, ThreadPoolTaskScheduler executor) {
         this.fareCommandService = fareCommandService;
@@ -82,7 +80,7 @@ public class TaskService {
                 latest.addAll(res);
 
                 var cache = fareCommandService.caches(task.getOrigin(), task.getDestination(), query);
-                for (Trip trip:cache) {
+                for (Trip trip : cache) {
                     Fare f = trip.getFares().getLast();
                     cached.add(f);
                 }
