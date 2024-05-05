@@ -110,10 +110,10 @@ public class FareCommandService {
         return month.atDay(1);
     }
 
-    @Scheduled(cron = "0 */1 * ? * *")
-    public void scheduleTaskUsingCronExpression() {
-        var res = fareByMonth("VIE", "KRK", "2024-05");
-
-        System.out.println(res.toString());
-    }
+//    @Scheduled(cron = "0 */1 * ? * *")
+//    public void scheduleTaskUsingCronExpression() {
+//        var res = fareByMonth("VIE", "KRK", "2024-05");
+//
+//        System.out.println(res.toString());
+//    }
 }

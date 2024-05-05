@@ -10,14 +10,13 @@ public class Task {
     @GeneratedValue
     private Long id;
 
-    private int interval;
+    private int intervals = 3600;
 
     private String origin;
 
-    private String to;
+    private String destination;
 
-    private int daysAheadFrom;
-    private int daysAheadTo;
+    private int monthsAhead;
 
     public void setId(Long id) {
         this.id = id;
@@ -27,12 +26,12 @@ public class Task {
         return id;
     }
 
-    public int getInterval() {
-        return interval;
+    public int getIntervals() {
+        return intervals;
     }
 
-    public void setInterval(int interval) {
-        this.interval = interval;
+    public void setIntervals(int interval) {
+        this.intervals = interval;
     }
 
     public String getOrigin() {
@@ -43,27 +42,19 @@ public class Task {
         this.origin = origin;
     }
 
-    public String getTo() {
-        return to;
+    public String getDestination() {
+        return destination;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setDestination(String to) {
+        this.destination = to;
     }
 
-    public int getDaysAheadFrom() {
-        return daysAheadFrom;
+    public int getMonthsAhead() {
+        return monthsAhead;
     }
 
-    public void setDaysAheadFrom(int daysAheadFrom) {
-        this.daysAheadFrom = daysAheadFrom;
-    }
-
-    public int getDaysAheadTo() {
-        return daysAheadTo;
-    }
-
-    public void setDaysAheadTo(int daysAheadTo) {
-        this.daysAheadTo = daysAheadTo;
+    public void setMonthsAhead(int monthsAhead) {
+        this.monthsAhead = monthsAhead;
     }
 }

@@ -18,7 +18,7 @@ public class Trip {
 
     private LocalDate date;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "trip_id")
     private List<Fare> fares = new ArrayList<>();
     @Transient

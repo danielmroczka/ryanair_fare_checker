@@ -50,6 +50,7 @@ task deploy {
         ssh.run {
             session(remotes.webServer) {
                 put from: 'C:/workspace.github/ryanair-webscrapper/build/libs/ryanair-webscrapper-0.0.1-SNAPSHOT.jar', into: '/home/ubuntu'
+                //execute './javakill.sh'
                 execute 'nohup java -jar ryanair-webscrapper-0.0.1-SNAPSHOT.jar &'
             }
         }

@@ -21,6 +21,7 @@ public class Fare {
     private String currency;
 
     private LocalDateTime date;
+
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Double change;
@@ -73,5 +74,11 @@ public class Fare {
 
     public void setChange(double change) {
         this.change = change;
+    }
+
+    @Override
+    public String toString() {
+        return "price=" + price + currency +
+                ", date=" + date;
     }
 }
