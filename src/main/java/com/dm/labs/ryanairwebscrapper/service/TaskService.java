@@ -6,8 +6,10 @@ import com.dm.labs.ryanairwebscrapper.entity.Trip;
 import com.dm.labs.ryanairwebscrapper.repository.TaskRepository;
 import com.dm.labs.ryanairwebscrapper.service.command.FareCommandService;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -20,11 +22,12 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 
 @Service
+@Validated
 public class TaskService {
 
     private final FareCommandService fareCommandService;
     private final TaskRepository repository;
-    List<ScheduledFuture> schedule = new ArrayList<>();
+    private List<ScheduledFuture> schedule = new ArrayList<>();
     private ThreadPoolTaskScheduler executor;
 
     public TaskService(FareCommandService fareCommandService, TaskRepository repository, ThreadPoolTaskScheduler executor) {
@@ -38,9 +41,10 @@ public class TaskService {
         scheduling();
     }
 
-    public void addNewTask(Task task) {
-        repository.save(task);
+    public Task addNewTask(@Valid Task task) {
+        var res = repository.save(task);
         scheduleTask(task);
+        return res;
     }
 
     private void onTaskChange(Long id) {

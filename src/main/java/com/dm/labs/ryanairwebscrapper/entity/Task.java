@@ -3,8 +3,12 @@ package com.dm.labs.ryanairwebscrapper.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.validation.annotation.Validated;
 
 @Entity
+@Validated
 public class Task {
     @Id
     @GeneratedValue
@@ -12,11 +16,14 @@ public class Task {
 
     private int intervals = 3600;
 
+    @NotNull
+    @Size(min=2, max=60)
     private String origin;
 
+    @NotNull
     private String destination;
 
-    private int monthsAhead;
+    private int monthsAhead = 0;
 
     public Long getId() {
         return id;
