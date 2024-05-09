@@ -2,6 +2,7 @@ package com.dm.labs.ryanairwebscrapper.controller;
 
 import com.dm.labs.ryanairwebscrapper.entity.Task;
 import com.dm.labs.ryanairwebscrapper.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public void createTask(@RequestBody Task task) {
+    public void createTask(@RequestBody @Valid Task task) {
         service.addNewTask(task);
     }
 
