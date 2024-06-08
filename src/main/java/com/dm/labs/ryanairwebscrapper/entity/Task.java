@@ -19,7 +19,7 @@ public class Task {
     private int intervals = 3600;
 
     @NotNull
-    @Size(min=3, max=5, message = "Origin should be 3 characters long")
+    @Size(min = 3, max = 5, message = "Origin should be 3 characters long")
     private String origin;
 
     @NotNull
