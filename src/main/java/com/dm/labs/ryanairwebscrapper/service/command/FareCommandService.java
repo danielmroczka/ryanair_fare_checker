@@ -65,12 +65,12 @@ public class FareCommandService {
     }
 
     private Trip fetchTrip(String origin, String destination, com.dm.labs.ryanairwebscrapper.clientmodel.Fare fare) {
-        Optional<Trip> result = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(fare.getDay()));
+        Optional<Trip> result = tripRepository.findByOriginAndDestinationAndDate(origin, destination, fare.getDay());
         if (result.isEmpty()) {
             var trip = new Trip();
             trip.setOrigin(origin);
             trip.setDestination(destination);
-            trip.setDate(LocalDate.parse(fare.getDay()));
+            trip.setDate(fare.getDay());
             tripRepository.save(trip);
             result = Optional.of(trip);
         }

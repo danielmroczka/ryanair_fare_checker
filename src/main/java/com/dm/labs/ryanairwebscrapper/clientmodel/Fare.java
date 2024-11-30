@@ -1,14 +1,18 @@
 package com.dm.labs.ryanairwebscrapper.clientmodel;
 
-public class Fare {
-    private String day;
-    private Price price;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-    public String getDay() {
+public class Fare {
+    private LocalDate day;
+    private Price price;
+    private LocalDateTime departureDate;
+
+    public LocalDate getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(LocalDate day) {
         this.day = day;
     }
 
@@ -18,6 +22,14 @@ public class Fare {
 
     public void setPrice(Price price) {
         this.price = price;
+    }
+
+    public LocalDateTime getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(LocalDateTime departureDate) {
+        this.departureDate = departureDate;
     }
 
     @Override

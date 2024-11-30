@@ -3,7 +3,7 @@
 #### Usage
 
 Build:  
-```gradlew bootRun```  
+```gradlew bootRun```
 
 Swagger site with exposed endpoints:  
 http://localhost:8090/api  
