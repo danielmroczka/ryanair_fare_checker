@@ -10,6 +10,7 @@ public class RyanairWebscrapperApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RyanairWebscrapperApplication.class, args);
+
     }
 
 }
