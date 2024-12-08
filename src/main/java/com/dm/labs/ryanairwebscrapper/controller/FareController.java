@@ -3,12 +3,14 @@ package com.dm.labs.ryanairwebscrapper.controller;
 import com.dm.labs.ryanairwebscrapper.clientmodel.Fare;
 import com.dm.labs.ryanairwebscrapper.entity.Trip;
 import com.dm.labs.ryanairwebscrapper.service.command.FareCommandService;
+import com.google.cloud.logging.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -49,6 +51,17 @@ public class FareController {
     @DeleteMapping("/caches/{origin}/{destination}/{date}")
     public void deleteTripByMonth(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
         fareService.delete(origin, destination, date);
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        Logging logging = LoggingOptions.getDefaultInstance().getService();
+        LogEntry entry = LogEntry.newBuilder(Payload.StringPayload.of("Custom log entry"))
+                .setSeverity(Severity.INFO)
+                .setLogName("my-log")
+                .build();
+        logging.write(Collections.singleton(entry));
+        return "Hello";
     }
 
 }
