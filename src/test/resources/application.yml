@@ -34,3 +34,7 @@ management:
     web:
       exposure:
         include: '*'
+
+ryanair:
+  api:
+    url: https://www.ryanair.com/api/farfnd/v4

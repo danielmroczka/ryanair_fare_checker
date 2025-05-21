@@ -6,6 +6,7 @@ import com.dm.labs.ryanairwebscrapper.entity.Trip;
 import com.dm.labs.ryanairwebscrapper.repository.FareRepository;
 import com.dm.labs.ryanairwebscrapper.repository.TripRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,10 +27,9 @@ public class FareCommandService {
     private final RestTemplate restTemplate;
     private final TripRepository tripRepository;
     private final FareRepository fareRepository;
-    private final String url = "https://www.ryanair.com/api/farfnd/v4";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public FareCommandService(RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, FareRepository priceRepository) {
+    public FareCommandService(@Value("${ryanair.api.url}") String url, RestTemplateBuilder restTemplateBuilder, TripRepository tripRepository, FareRepository priceRepository) {
         this.restTemplate = restTemplateBuilder.rootUri(url).build();
         this.tripRepository = tripRepository;
         this.fareRepository = priceRepository;
