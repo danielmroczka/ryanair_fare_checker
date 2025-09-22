@@ -55,14 +55,7 @@ class FareCommandServiceTest {
         );
     }
 
-    @Test
-    public void checkFareMonthAhead() {
-        // Setup
-        LocalDate localDate = LocalDate.now();
-        LocalDate futureDate = localDate.plusMonths(1); // Note: LocalDate is immutable, need to assign result
-        String month = futureDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
-
-        // Create mock response
+    private static Root getRoot() {
         Root mockRoot = new Root();
         Outbound outbound = new Outbound();
         List<Fare> fareList = new ArrayList<>();
@@ -77,10 +70,22 @@ class FareCommandServiceTest {
 
         outbound.setFares(fareList);
         mockRoot.setOutbound(outbound);
+        return mockRoot;
+    }
+
+    @Test
+    public void checkFareMonthAhead() {
+        // Setup
+        LocalDate localDate = LocalDate.now();
+        LocalDate futureDate = localDate.plusMonths(1); // Note: LocalDate is immutable, need to assign result
+        String month = futureDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        // Create mock response
+        Root mockRoot = getRoot();
 
         // Mock the REST call
         String expectedUrl = String.format("/oneWayFares/%s/%s/cheapestPerDay?outboundMonthOfDate=%s&currency=EUR",
-                "KRK", "VIE", futureDate.withDayOfMonth(1).toString());
+                "KRK", "VIE", futureDate.withDayOfMonth(1));
         when(restTemplate.getForEntity(anyString(), eq(Root.class)))
                 .thenReturn(ResponseEntity.ok(mockRoot));
 

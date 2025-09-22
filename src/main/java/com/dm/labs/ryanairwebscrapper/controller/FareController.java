@@ -35,8 +35,7 @@ public class FareController {
     @Operation(summary = "Retrieves price report by day")
     @GetMapping("/cache/{origin}/{destination}/{date}")
     public Trip readTripByDate(@PathVariable String origin, @PathVariable String destination, @PathVariable String date) {
-        var root = fareService.cache(origin, destination, date);
-        return root;
+        return fareService.cache(origin, destination, date);
     }
 
     @Operation(summary = "Retrieves price report by month")

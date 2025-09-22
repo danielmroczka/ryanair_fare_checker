@@ -80,7 +80,7 @@ public class FareCommandService {
     public Trip cache(String origin, String destination, String date) {
         Trip trip = tripRepository.findByOriginAndDestinationAndDate(origin, destination, LocalDate.parse(date)).orElseThrow(EntityNotFoundException::new);
 
-        var last = trip.getFares().get(0).getPrice();
+        var last = trip.getFares().getFirst().getPrice();
 
         for (Fare fare : trip.getFares()) {
             var delta = fare.getPrice() - last;

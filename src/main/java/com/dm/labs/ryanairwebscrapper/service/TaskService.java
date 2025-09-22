@@ -27,8 +27,8 @@ public class TaskService {
 
     private final FareCommandService fareCommandService;
     private final TaskRepository repository;
-    private List<ScheduledFuture> schedule = new ArrayList<>();
-    private ThreadPoolTaskScheduler executor;
+    private final List<ScheduledFuture> schedule = new ArrayList<>();
+    private final ThreadPoolTaskScheduler executor;
 
     public TaskService(FareCommandService fareCommandService, TaskRepository repository, ThreadPoolTaskScheduler executor) {
         this.fareCommandService = fareCommandService;
