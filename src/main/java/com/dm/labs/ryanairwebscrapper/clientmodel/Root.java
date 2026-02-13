@@ -1,4 +1,4 @@
-package com.dm.labs.ryanairwebscrapper.model;
+package com.dm.labs.ryanairwebscrapper.clientmodel;
 
 public class Root {
     private Outbound outbound;

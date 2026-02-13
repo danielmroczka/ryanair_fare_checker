@@ -1,4 +1,4 @@
-package com.dm.labs.ryanairwebscrapper.model;
+package com.dm.labs.ryanairwebscrapper.clientmodel;
 
 public class Price {
     private String value;
@@ -19,5 +19,10 @@ public class Price {
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
+    }
+
+    @Override
+    public String toString() {
+        return "'" + value + currencyCode + '\'';
     }
 }

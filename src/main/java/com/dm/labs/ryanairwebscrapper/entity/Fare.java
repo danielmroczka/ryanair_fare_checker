@@ -1,14 +1,16 @@
 package com.dm.labs.ryanairwebscrapper.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Price {
+public class Fare {
     @Id
     @GeneratedValue
     @JsonIgnore
@@ -20,13 +22,17 @@ public class Price {
 
     private LocalDateTime date;
 
-    public Price(double price, String currency, LocalDateTime date) {
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Double change;
+
+    public Fare(double price, String currency, LocalDateTime date) {
         this.price = price;
         this.currency = currency;
         this.date = date;
     }
 
-    public Price() {
+    public Fare() {
 
     }
 
@@ -60,5 +66,19 @@ public class Price {
 
     public void setCurrency(String currency) {
         this.currency = currency;
+    }
+
+    public double getChange() {
+        return change;
+    }
+
+    public void setChange(double change) {
+        this.change = change;
+    }
+
+    @Override
+    public String toString() {
+        return "price=" + price + currency +
+                ", date=" + date;
     }
 }

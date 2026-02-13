@@ -1,14 +1,16 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.springframework.boot' version '3.5.6'
+    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.hidetake.ssh' version '2.11.2'
+    id 'org.sonarqube' version '4.4.1.3373'
 }
 
 group = 'com.dm.labs'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '17'
+    sourceCompatibility = '21'
 }
 
 repositories {
@@ -22,13 +24,36 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // Springdoc
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    // Runtime
     runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+remotes {
+    webServer {
+        host = '152.67.66.146'
+        user = 'ubuntu'
+        identity = file('c:/users/daniel/.ssh/oci-ubuntu/ssh-key-2021-10-14.key')
+    }
+}
+
+task deploy {
+    doLast {
+        ssh.run {
+            session(remotes.webServer) {
+                put from: 'C:/workspace.github/ryanair-webscrapper/build/libs/ryanair-webscrapper-0.0.1-SNAPSHOT.jar', into: '/home/ubuntu'
+                //execute './javakill.sh'
+                execute 'nohup java -jar ryanair-webscrapper-0.0.1-SNAPSHOT.jar &'
+            }
+        }
+    }
 }
